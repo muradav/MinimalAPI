@@ -33,3 +33,5 @@ C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_Cou
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\obj\Debug\net7.0\ref\MagicVilla_CouponAPI.dll
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\AutoMapper.dll
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\FluentValidation.dll
+C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
