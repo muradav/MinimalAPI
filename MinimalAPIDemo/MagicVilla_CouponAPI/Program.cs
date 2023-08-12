@@ -15,10 +15,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/helloworld", () => 
-{ 
+{
     return Results.BadRequest("Exception!!!");
 });
-app.MapPost("/helloworld2", () => Results.Ok("Hello World! 2"));
+app.MapPost("/helloworld2", () => Results.Ok("Hello World!!"));
 
 app.UseHttpsRedirection();
 
