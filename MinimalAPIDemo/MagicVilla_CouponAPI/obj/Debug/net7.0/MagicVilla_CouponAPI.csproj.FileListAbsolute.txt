@@ -31,3 +31,5 @@ C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_Cou
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\obj\Debug\net7.0\MagicVilla_CouponAPI.pdb
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\obj\Debug\net7.0\MagicVilla_CouponAPI.genruntimeconfig.cache
 C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\obj\Debug\net7.0\ref\MagicVilla_CouponAPI.dll
+C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\HP\Desktop\Folders\Development\MinimalAPI\MinimalAPIDemo\MagicVilla_CouponAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
