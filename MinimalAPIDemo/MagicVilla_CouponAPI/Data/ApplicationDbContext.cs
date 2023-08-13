@@ -18,7 +18,7 @@ namespace MagicVilla_CouponAPI.Data
                 new Coupon()
                 {
                     Id = 1,
-                    Name = "100FF",
+                    Name = "10OFF",
                     Percent = 10,
                     IsActive = true
                 },
@@ -26,7 +26,7 @@ namespace MagicVilla_CouponAPI.Data
                 new Coupon()
                 {
                     Id = 2,
-                    Name = "200FF",
+                    Name = "20OFF",
                     Percent = 20,
                     IsActive = true
                 });                
