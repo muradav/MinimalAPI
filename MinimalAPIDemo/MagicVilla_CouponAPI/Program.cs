@@ -30,10 +30,10 @@ if (app.Environment.IsDevelopment())
 
 
 
-app.MapGet("/api/coupon", (ILogger<Program> _logger) => {
+app.MapGet("/api/coupon",async (ApplicationDbContext _db,ILogger<Program> _logger) => {
     APIResponse response = new();
     _logger.Log(LogLevel.Information, "Getting all coupons");
-    response.Result = CouponStore.couponList;
+    response.Result = _db.Coupons;
     response.IsSuccess = true;
     response.StatusCode = HttpStatusCode.OK;
     return Results.Ok(response);
@@ -41,9 +41,9 @@ app.MapGet("/api/coupon", (ILogger<Program> _logger) => {
 
 
 
-app.MapGet("/api/coupon/{id:int}", (int id) => {
+app.MapGet("/api/coupon/{id:int}",async (ApplicationDbContext _db, int id) => {
     APIResponse response = new();
-    response.Result = CouponStore.couponList.FirstOrDefault(c => c.Id == id);
+    response.Result = await _db.Coupons.FirstOrDefaultAsync(c => c.Id == id);
     response.IsSuccess = true;
     response.StatusCode = HttpStatusCode.OK;
     return Results.Ok(response);
@@ -51,7 +51,7 @@ app.MapGet("/api/coupon/{id:int}", (int id) => {
 
 
 
-app.MapPost("/api/coupon", async (IMapper _mapper,
+app.MapPost("/api/coupon", async (ApplicationDbContext _db, IMapper _mapper,
     IValidator<CouponCreateDTO> _validator ,[FromBody] CouponCreateDTO coupon_C_DTO) =>
 {
     APIResponse response = new() { IsSuccess = false, StatusCode = HttpStatusCode.BadRequest };
@@ -63,7 +63,7 @@ app.MapPost("/api/coupon", async (IMapper _mapper,
         response.ErrorMessages.Add(validationResult.Errors.FirstOrDefault().ToString());
         return Results.BadRequest(response);
     }
-    if (CouponStore.couponList.FirstOrDefault(c => c.Name.ToLower() == coupon_C_DTO.Name.ToLower()) != null)
+    if (await _db.Coupons.FirstOrDefaultAsync(c => c.Name.ToLower() == coupon_C_DTO.Name.ToLower()) != null)
     {
         response.ErrorMessages.Add("Coupon Name alredy Exists");
         return Results.BadRequest(response);
@@ -71,8 +71,8 @@ app.MapPost("/api/coupon", async (IMapper _mapper,
 
     Coupon coupon = _mapper.Map<Coupon>(coupon_C_DTO);
 
-    coupon.Id = CouponStore.couponList.OrderByDescending(c => c.Id).FirstOrDefault().Id+1;
-    CouponStore.couponList.Add(coupon);
+    _db.Coupons.Add(coupon);
+    await _db.SaveChangesAsync();
     CouponDTO couponDTO = _mapper.Map<CouponDTO>(coupon);
 
     response.Result = couponDTO;
@@ -87,7 +87,7 @@ app.MapPost("/api/coupon", async (IMapper _mapper,
 
 
 
-app.MapPut("/api/coupon", async (IMapper _mapper,
+app.MapPut("/api/coupon", async (ApplicationDbContext _db, IMapper _mapper,
     IValidator<CouponUpdateDTO> _validator, [FromBody] CouponUpdateDTO coupon_U_DTO) =>
 {
     APIResponse response = new() { IsSuccess = false, StatusCode = HttpStatusCode.BadRequest };
@@ -100,12 +100,14 @@ app.MapPut("/api/coupon", async (IMapper _mapper,
         return Results.BadRequest(response);
     }
 
-    Coupon couponFromStore = CouponStore.couponList.FirstOrDefault(c => c.Id == coupon_U_DTO.Id);
+    Coupon couponFromStore =await _db.Coupons.FirstOrDefaultAsync(c => c.Id == coupon_U_DTO.Id);
     couponFromStore.IsActive = coupon_U_DTO.IsActive;
     couponFromStore.Name = coupon_U_DTO.Name;
     couponFromStore.Percent = coupon_U_DTO.Percent;
     couponFromStore.LastUpdated = DateTime.Now;
 
+    //_db.Coupons.Update(_mapper.Map<Coupon>(coupon_U_DTO));
+    await _db.SaveChangesAsync();
 
     response.Result = _mapper.Map<CouponDTO>(couponFromStore);
     response.IsSuccess = true;
@@ -116,14 +118,15 @@ app.MapPut("/api/coupon", async (IMapper _mapper,
 
 
 
-app.MapDelete("/api/coupon/{id:int}", (int id) =>
+app.MapDelete("/api/coupon/{id:int}", async (ApplicationDbContext _db, int id) =>
 {
     APIResponse response = new() { IsSuccess = false, StatusCode = HttpStatusCode.BadRequest };
 
-    Coupon couponFromStore = CouponStore.couponList.FirstOrDefault(c => c.Id == id);
+    Coupon couponFromStore =await _db.Coupons.FirstOrDefaultAsync(c => c.Id == id);
     if (couponFromStore != null)
     {
-        CouponStore.couponList.Remove(couponFromStore);
+        _db.Coupons.Remove(couponFromStore);
+        await _db.SaveChangesAsync();
         response.IsSuccess = true;
         response.StatusCode = HttpStatusCode.NoContent;
         return Results.Ok(response);
