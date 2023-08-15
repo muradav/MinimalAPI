@@ -14,10 +14,20 @@ namespace MagicVilla_CouponAPI.Endpoints
         public static void ConfigureCouponEndpoints(this WebApplication app)
         {
             app.MapGet("/api/coupon", GetAllCoupons).WithName("GetCoupons")
-                .Produces<IEnumerable<APIResponse>>(200).RequireAuthorization("AdminOnly");
+                .Produces<IEnumerable<APIResponse>>(200);
+            //.RequireAuthorization("AdminOnly");
 
             app.MapGet("/api/coupon/{id:int}", GetCoupon).WithName("GetCoupon")
-                .Produces<APIResponse>(200);
+                .Produces<APIResponse>(200).AddEndpointFilter(async(context,next) =>
+                {
+                    var id = context.GetArgument<int>(1);
+                    if (id == 0)
+                    {
+                        return Results.BadRequest("Cannot have o in id");
+                    }
+
+                    return await next(context);
+                });
 
             app.MapPost("/api/coupon", CreateCoupon).WithName("CreateCoupon")
                 .Accepts<CouponCreateDTO>("application/json").Produces<APIResponse>(201).Produces(400);
@@ -48,7 +58,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             return Results.Ok(response);
         }
 
-        [Authorize]
+        //[Authorize]
         private async static Task<IResult> CreateCoupon(ICouponRepository _couponRepo, IMapper _mapper,
                 IValidator<CouponCreateDTO> _validator, [FromBody] CouponCreateDTO coupon_C_DTO)
         {
@@ -83,7 +93,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             //return Results.CreatedAtRoute("GetCoupon",new { id=coupon.Id}, couponDTO);
         }
 
-        [Authorize]
+        //[Authorize]
         private async static Task<IResult> UpdateCoupon(ICouponRepository _couponRepo, IMapper _mapper,
                 IValidator<CouponUpdateDTO> _validator, [FromBody] CouponUpdateDTO coupon_U_DTO)
         {
@@ -107,7 +117,7 @@ namespace MagicVilla_CouponAPI.Endpoints
             return Results.Ok(response);
         }
 
-        [Authorize]
+        //[Authorize]
         private async static Task<IResult> DeleteCoupon(ICouponRepository _couponRepo, int id)
         {
             APIResponse response = new() { IsSuccess = false, StatusCode = HttpStatusCode.BadRequest };
